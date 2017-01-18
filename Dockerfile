@@ -28,10 +28,38 @@ ADD .htaccess ./.htaccess
 RUN rm application/config/config.ini.changeme
 ADD config.ini application/config/config.ini
 RUN mv application/logs/errors.log.empty application/logs/errors.log
+WORKDIR /var/www/Omeka/themes
+RUN wget http://omeka.org/wordpress/wp-content/uploads/Emiglio-2.1.1.zip
+RUN unzip Emiglio-2.1.1.zip
+RUN rm Emiglio-2.1.1.zip
+RUN wget http://omeka.org/wordpress/wp-content/uploads/Avantgarde-1.zip
+RUN unzip Avantgarde-1.zip
+RUN rm Avantgarde-1.zip
 WORKDIR /var/www/Omeka/plugins
 RUN wget http://omeka.org/wordpress/wp-content/uploads/Omeka-Api-Import-1.1.1.zip
 RUN unzip Omeka-Api-Import-1.1.1.zip
 RUN rm Omeka-Api-Import-1.1.1.zip
+RUN wget http://omeka.org/wordpress/wp-content/uploads/Dropbox-0.7.2.zip
+RUN unzip Dropbox-0.7.2.zip
+RUN rm Dropbox-0.7.2.zip
+RUN wget http://omeka.org/wordpress/wp-content/uploads/Dropbox-0.7.2.zip
+RUN unzip Dropbox-0.7.2.zip
+RUN rm Dropbox-0.7.2.zip
+RUN wget http://omeka.org/wordpress/wp-content/uploads/Geolocation-2.2.5.zip
+RUN unzip Geolocation-2.2.5.zip
+RUN rm Geolocation-2.2.5.zip
+RUN wget http://omeka.org/wordpress/wp-content/uploads/History-Log-2.6.zip
+RUN unzip History-Log-2.6.zip
+RUN rm History-Log-2.6.zip
+RUN wget http://omeka.org/wordpress/wp-content/uploads/Item-Order-2.0.2.zip
+RUN unzip Item-Order-2.0.2.zip
+RUN rm Item-Order-2.0.2.zip
+RUN wget http://omeka.org/wordpress/wp-content/uploads/Ngram-1.1.zip
+RUN unzip Ngram-1.1.zip
+RUN rm Ngram-1.1.zip
+RUN wget http://omeka.org/wordpress/wp-content/uploads/Clean-Url-2.14.zip
+RUN unzip Clean-Url-2.14.zip
+RUN rm Clean-Url-2.14.zip
 WORKDIR /var/www/Omeka
 RUN find . -type d | xargs chmod 775
 RUN find . -type f | xargs chmod 664
@@ -47,8 +75,8 @@ ENV APPLICATION_ENV development
 ENV HTTPS false
 
 # Configure php
-ENV PHP_MEMORY_LIMIT 16M
-ENV PHP_UPLOAD_MAX_FILESIZE 10M
+ENV PHP_MEMORY_LIMIT 64M
+ENV PHP_UPLOAD_MAX_FILESIZE 100M
 ENV PHP_POST_MAX_SIZE 10M
 
 # Configure mysql
