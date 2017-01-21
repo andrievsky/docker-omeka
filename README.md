@@ -25,3 +25,11 @@ docker build -t my-custom-omeka .
 ```
 
 see the wiki for more information on how the Omeka image is built.
+
+
+## Additional Setup
+S3 configuration in config.ini
+docker rm `docker ps --no-trunc -aq` -f
+docker rmi $(docker images -a -q)
+docker build -t omeka .
+docker-compose up -d

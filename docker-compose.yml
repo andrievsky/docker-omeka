@@ -11,7 +11,7 @@ services:
       MYSQL_PASSWORD: omeka
 
   omeka:
-    image: watzek/omeka:latest
+    image: omeka:latest
     links:
       - db
     ports:

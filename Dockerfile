@@ -1,5 +1,5 @@
 FROM php:7.0-apache
-MAINTAINER Nick Budak <budak@lclark.edu>, Rishi Javia <rishijavia@lclark.edu>
+MAINTAINER Nick Andrievsky
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -9,12 +9,13 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.license="Apache" \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-type="Git" \
-      org.label-schema.vcs-url="https://github.com/WatzekDigitalInitiatives/docker-omeka"
+      org.label-schema.vcs-url="https://github.com/andrievsky/docker-omeka"
 
 # Install dependencies
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y git imagemagick wget unzip
 RUN docker-php-ext-install exif mysqli
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install omeka
 WORKDIR /var/www
@@ -32,16 +33,10 @@ WORKDIR /var/www/Omeka/themes
 RUN wget http://omeka.org/wordpress/wp-content/uploads/Emiglio-2.1.1.zip
 RUN unzip Emiglio-2.1.1.zip
 RUN rm Emiglio-2.1.1.zip
-RUN wget http://omeka.org/wordpress/wp-content/uploads/Avantgarde-1.zip
-RUN unzip Avantgarde-1.zip
-RUN rm Avantgarde-1.zip
 WORKDIR /var/www/Omeka/plugins
 RUN wget http://omeka.org/wordpress/wp-content/uploads/Omeka-Api-Import-1.1.1.zip
 RUN unzip Omeka-Api-Import-1.1.1.zip
 RUN rm Omeka-Api-Import-1.1.1.zip
-RUN wget http://omeka.org/wordpress/wp-content/uploads/Dropbox-0.7.2.zip
-RUN unzip Dropbox-0.7.2.zip
-RUN rm Dropbox-0.7.2.zip
 RUN wget http://omeka.org/wordpress/wp-content/uploads/Dropbox-0.7.2.zip
 RUN unzip Dropbox-0.7.2.zip
 RUN rm Dropbox-0.7.2.zip
@@ -54,12 +49,9 @@ RUN rm History-Log-2.6.zip
 RUN wget http://omeka.org/wordpress/wp-content/uploads/Item-Order-2.0.2.zip
 RUN unzip Item-Order-2.0.2.zip
 RUN rm Item-Order-2.0.2.zip
-RUN wget http://omeka.org/wordpress/wp-content/uploads/Ngram-1.1.zip
-RUN unzip Ngram-1.1.zip
-RUN rm Ngram-1.1.zip
-RUN wget http://omeka.org/wordpress/wp-content/uploads/Clean-Url-2.14.zip
-RUN unzip Clean-Url-2.14.zip
-RUN rm Clean-Url-2.14.zip
+RUN git clone https://github.com/EHRI/omeka-amazon-s3-storage-adapter.git 
+RUN cd omeka-amazon-s3-storage-adapter && \
+    composer install --no-interaction
 WORKDIR /var/www/Omeka
 RUN find . -type d | xargs chmod 775
 RUN find . -type f | xargs chmod 664
@@ -75,8 +67,8 @@ ENV APPLICATION_ENV development
 ENV HTTPS false
 
 # Configure php
-ENV PHP_MEMORY_LIMIT 64M
-ENV PHP_UPLOAD_MAX_FILESIZE 100M
+ENV PHP_MEMORY_LIMIT 16M
+ENV PHP_UPLOAD_MAX_FILESIZE 10M
 ENV PHP_POST_MAX_SIZE 10M
 
 # Configure mysql
